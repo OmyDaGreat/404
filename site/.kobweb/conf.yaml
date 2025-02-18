@@ -1,0 +1,14 @@
+site:
+  title: "Malefic 404"
+
+server:
+  files:
+    dev:
+      contentRoot: "build/processedResources/js/main/public"
+      script: "build/kotlin-webpack/js/developmentExecutable/_404.js"
+      api: "build/libs/_404.jar"
+    prod:
+      script: "build/kotlin-webpack/js/productionExecutable/_404.js"
+      siteRoot: ".kobweb/site"
+
+  port: 8080
