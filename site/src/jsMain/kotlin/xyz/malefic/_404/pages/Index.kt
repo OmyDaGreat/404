@@ -1,6 +1,9 @@
 package xyz.malefic._404.pages
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import com.varabyte.kobweb.compose.css.Cursor
 import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.css.TextAlign
@@ -39,7 +42,52 @@ import org.jetbrains.compose.web.css.DisplayStyle
 import org.jetbrains.compose.web.css.JustifyContent
 import org.jetbrains.compose.web.css.px
 import org.jetbrains.compose.web.css.s
+import org.w3c.dom.MediaQueryList
+import org.w3c.dom.events.Event
 import com.varabyte.kobweb.compose.ui.graphics.Color as ComposeColor
+
+object Theme {
+    private var isDarkMode by mutableStateOf(false)
+    private var mediaQuery: MediaQueryList? = null
+
+    init {
+        // Initialize the dark mode state based on system preference
+        mediaQuery = window.matchMedia("(prefers-color-scheme: dark)")
+        isDarkMode = mediaQuery?.matches ?: false
+
+        // Add listener for system theme changes
+        mediaQuery?.addEventListener("change", { event: Event ->
+            val mediaQueryEvent = event.unsafeCast<MediaQueryList>()
+            isDarkMode = mediaQueryEvent.matches
+        })
+    }
+
+    // Colors for light theme
+    private val lightColors =
+        object {
+            val background = ComposeColor.rgb(249, 250, 251)
+            val text = ComposeColor.rgb(31, 41, 55)
+            val secondaryText = ComposeColor.rgb(107, 114, 128)
+            val primary = ComposeColor.rgb(79, 70, 229)
+            val primaryHover = ComposeColor.rgb(67, 56, 202)
+        }
+
+    // Colors for dark theme
+    private val darkColors =
+        object {
+            val background = ComposeColor.rgb(17, 24, 39)
+            val text = ComposeColor.rgb(243, 244, 246)
+            val secondaryText = ComposeColor.rgb(156, 163, 175)
+            val primary = ComposeColor.rgb(99, 102, 241)
+            val primaryHover = ComposeColor.rgb(129, 140, 248)
+        }
+
+    val backgroundColor get() = if (isDarkMode) darkColors.background else lightColors.background
+    val textColor get() = if (isDarkMode) darkColors.text else lightColors.text
+    val secondaryTextColor get() = if (isDarkMode) darkColors.secondaryText else lightColors.secondaryText
+    val primaryColor get() = if (isDarkMode) darkColors.primary else lightColors.primary
+    val primaryHoverColor get() = if (isDarkMode) darkColors.primaryHover else lightColors.primaryHover
+}
 
 val TextStyle =
     CssStyle {
@@ -47,7 +95,7 @@ val TextStyle =
             Modifier
                 .fontSize(120.px)
                 .fontWeight(FontWeight.Bold)
-                .color(ComposeColor.rgb(31, 41, 55))
+                .color(Theme.textColor)
                 .opacity(0.8)
                 .transition(Transition.of("transform", 0.3.s))
         }
@@ -60,7 +108,7 @@ val ButtonStyle =
     CssStyle {
         base {
             Modifier
-                .backgroundColor(ComposeColor.rgb(79, 70, 229))
+                .backgroundColor(Theme.primaryColor)
                 .color(Colors.White)
                 .padding(leftRight = 24.px, topBottom = 12.px)
                 .borderRadius(8.px)
@@ -68,7 +116,7 @@ val ButtonStyle =
                 .transition(Transition.of("background-color", 0.2.s))
         }
         hover {
-            Modifier.backgroundColor(ComposeColor.rgb(67, 56, 202))
+            Modifier.backgroundColor(Theme.primaryHoverColor)
         }
     }
 
@@ -78,7 +126,7 @@ fun NotFoundPage() {
     Box(
         Modifier
             .fillMaxSize()
-            .backgroundColor(ComposeColor.rgb(249, 250, 251))
+            .backgroundColor(Theme.backgroundColor)
             .display(DisplayStyle.Flex)
             .justifyContent(JustifyContent.Center)
             .alignItems(AlignItems.Center),
@@ -103,7 +151,7 @@ fun NotFoundPage() {
                 Modifier
                     .fontSize(36.px)
                     .fontWeight(FontWeight.Medium)
-                    .color(ComposeColor.rgb(31, 41, 55))
+                    .color(Theme.textColor)
                     .margin(bottom = 16.px),
             )
 
@@ -112,7 +160,7 @@ fun NotFoundPage() {
                 "Sorry, we couldn't find the page you're looking for. Please check the URL or go back to the homepage.",
                 Modifier
                     .fontSize(16.px)
-                    .color(ComposeColor.rgb(107, 114, 128))
+                    .color(Theme.secondaryTextColor)
                     .textAlign(TextAlign.Center)
                     .margin(bottom = 32.px),
             )
