@@ -3,7 +3,7 @@ name: Deploy Kobweb site to Pages
 on:
   push:
     branches:
-      - main
+      - master
 
   workflow_dispatch:
 
