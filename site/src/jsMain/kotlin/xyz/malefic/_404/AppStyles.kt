@@ -30,6 +30,17 @@ fun initSiteStyles(ctx: InitSilkContext) {
         }
     }
 
+    // Add smooth transitions for color mode changes
+    ctx.stylesheet.registerStyle("*") {
+        cssRule(CSSMediaQuery.MediaFeature("prefers-reduced-motion", StylePropertyValue("no-preference"))) {
+            Modifier.transition(
+                Transition.of("background-color", 0.3.s),
+                Transition.of("color", 0.3.s),
+                Transition.of("border-color", 0.3.s)
+            )
+        }
+    }
+
     ctx.stylesheet.registerStyleBase("body") {
         Modifier
             .fontFamily(
@@ -37,7 +48,8 @@ fun initSiteStyles(ctx: InitSilkContext) {
                 "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "sans-serif"
             )
             .fontSize(18.px)
-            .lineHeight(1.5)
+            .lineHeight(1.6)
+            .fontWeight(400)
     }
 
     // Silk dividers only extend 90% by default; we want full width dividers in our site
