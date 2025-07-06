@@ -1,13 +1,11 @@
 package xyz.malefic._404.pages
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import com.varabyte.kobweb.compose.css.Cursor
 import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.css.TextAlign
 import com.varabyte.kobweb.compose.css.Transition
+import com.varabyte.kobweb.compose.css.TransitionProperty
 import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.foundation.layout.Column
 import com.varabyte.kobweb.compose.ui.Alignment
@@ -16,6 +14,7 @@ import com.varabyte.kobweb.compose.ui.graphics.Colors
 import com.varabyte.kobweb.compose.ui.modifiers.alignItems
 import com.varabyte.kobweb.compose.ui.modifiers.backgroundColor
 import com.varabyte.kobweb.compose.ui.modifiers.borderRadius
+import com.varabyte.kobweb.compose.ui.modifiers.boxShadow
 import com.varabyte.kobweb.compose.ui.modifiers.color
 import com.varabyte.kobweb.compose.ui.modifiers.cursor
 import com.varabyte.kobweb.compose.ui.modifiers.display
@@ -23,6 +22,7 @@ import com.varabyte.kobweb.compose.ui.modifiers.fillMaxSize
 import com.varabyte.kobweb.compose.ui.modifiers.fontSize
 import com.varabyte.kobweb.compose.ui.modifiers.fontWeight
 import com.varabyte.kobweb.compose.ui.modifiers.justifyContent
+import com.varabyte.kobweb.compose.ui.modifiers.letterSpacing
 import com.varabyte.kobweb.compose.ui.modifiers.margin
 import com.varabyte.kobweb.compose.ui.modifiers.maxWidth
 import com.varabyte.kobweb.compose.ui.modifiers.onClick
@@ -36,146 +36,151 @@ import com.varabyte.kobweb.silk.components.text.SpanText
 import com.varabyte.kobweb.silk.style.CssStyle
 import com.varabyte.kobweb.silk.style.selectors.hover
 import com.varabyte.kobweb.silk.style.toModifier
+import com.varabyte.kobweb.silk.theme.colors.ColorMode
+import com.varabyte.kobweb.silk.theme.colors.palette.background
+import com.varabyte.kobweb.silk.theme.colors.palette.color
+import com.varabyte.kobweb.silk.theme.colors.palette.toPalette
 import kotlinx.browser.window
 import org.jetbrains.compose.web.css.AlignItems
 import org.jetbrains.compose.web.css.DisplayStyle
 import org.jetbrains.compose.web.css.JustifyContent
+import org.jetbrains.compose.web.css.em
 import org.jetbrains.compose.web.css.px
 import org.jetbrains.compose.web.css.s
-import org.w3c.dom.MediaQueryList
-import org.w3c.dom.events.Event
-import com.varabyte.kobweb.compose.ui.graphics.Color as ComposeColor
+import xyz.malefic._404.toSitePalette
 
-object Theme {
-    private var isDarkMode by mutableStateOf(false)
-    private var mediaQuery: MediaQueryList? = null
-
-    init {
-        // Initialize the dark mode state based on system preference
-        mediaQuery = window.matchMedia("(prefers-color-scheme: dark)")
-        isDarkMode = mediaQuery?.matches ?: false
-
-        // Add listener for system theme changes
-        mediaQuery?.addEventListener("change", { event: Event ->
-            val mediaQueryEvent = event.unsafeCast<MediaQueryList>()
-            isDarkMode = mediaQueryEvent.matches
-        })
+val NotFoundTextStyle = CssStyle {
+    base {
+        Modifier
+            .fontSize(120.px)
+            .fontWeight(FontWeight.Bold)
+            .letterSpacing((-0.05).em)
+            .color(colorMode.toPalette().color)
+            .opacity(0.9)
+            .transition(
+                Transition.of(TransitionProperty.All, 0.4.s),
+                Transition.of("transform", 0.3.s)
+            )
     }
-
-    // Colors for light theme
-    private val lightColors =
-        object {
-            val background = ComposeColor.rgb(249, 250, 251)
-            val text = ComposeColor.rgb(31, 41, 55)
-            val secondaryText = ComposeColor.rgb(107, 114, 128)
-            val primary = ComposeColor.rgb(79, 70, 229)
-            val primaryHover = ComposeColor.rgb(67, 56, 202)
-        }
-
-    // Colors for dark theme
-    private val darkColors =
-        object {
-            val background = ComposeColor.rgb(17, 24, 39)
-            val text = ComposeColor.rgb(243, 244, 246)
-            val secondaryText = ComposeColor.rgb(156, 163, 175)
-            val primary = ComposeColor.rgb(99, 102, 241)
-            val primaryHover = ComposeColor.rgb(129, 140, 248)
-        }
-
-    val backgroundColor get() = if (isDarkMode) darkColors.background else lightColors.background
-    val textColor get() = if (isDarkMode) darkColors.text else lightColors.text
-    val secondaryTextColor get() = if (isDarkMode) darkColors.secondaryText else lightColors.secondaryText
-    val primaryColor get() = if (isDarkMode) darkColors.primary else lightColors.primary
-    val primaryHoverColor get() = if (isDarkMode) darkColors.primaryHover else lightColors.primaryHover
+    hover {
+        Modifier
+            .transform { scale(1.05) }
+            .opacity(1.0)
+    }
 }
 
-val TextStyle =
-    CssStyle {
-        base {
-            Modifier
-                .fontSize(120.px)
-                .fontWeight(FontWeight.Bold)
-                .color(Theme.textColor)
-                .opacity(0.8)
-                .transition(Transition.of("transform", 0.3.s))
-        }
-        hover {
-            Modifier.transform { scale(1.05) }
-        }
+val EnhancedButtonStyle = CssStyle {
+    base {
+        val sitePalette = colorMode.toSitePalette()
+        Modifier
+            .backgroundColor(sitePalette.brand.primary)
+            .color(Colors.White)
+            .padding(leftRight = 32.px, topBottom = 16.px)
+            .borderRadius(12.px)
+            .cursor(Cursor.Pointer)
+            .fontSize(16.px)
+            .fontWeight(FontWeight.Medium)
+            .letterSpacing(0.025.em)
+            .boxShadow(
+                offsetX = 0.px, 
+                offsetY = 4.px, 
+                blurRadius = 16.px, 
+                color = sitePalette.shadow
+            )
+            .transition(
+                Transition.of("background-color", 0.2.s),
+                Transition.of("transform", 0.2.s),
+                Transition.of("box-shadow", 0.2.s)
+            )
     }
+    hover {
+        val sitePalette = colorMode.toSitePalette()
+        Modifier
+            .backgroundColor(sitePalette.brand.primaryHover)
+            .transform { scale(1.02) }
+            .boxShadow(
+                offsetX = 0.px, 
+                offsetY = 8.px, 
+                blurRadius = 20.px, 
+                color = sitePalette.shadow
+            )
+    }
+}
 
-val ButtonStyle =
-    CssStyle {
-        base {
-            Modifier
-                .backgroundColor(Theme.primaryColor)
-                .color(Colors.White)
-                .padding(leftRight = 24.px, topBottom = 12.px)
-                .borderRadius(8.px)
-                .cursor(Cursor.Pointer)
-                .transition(Transition.of("background-color", 0.2.s))
-        }
-        hover {
-            Modifier.backgroundColor(Theme.primaryHoverColor)
-        }
-    }
+val NotFoundCardStyle = CssStyle.base {
+    val sitePalette = colorMode.toSitePalette()
+    Modifier
+        .backgroundColor(sitePalette.surface)
+        .borderRadius(24.px)
+        .padding(48.px)
+        .boxShadow(
+            offsetX = 0.px,
+            offsetY = 20.px,
+            blurRadius = 40.px,
+            color = sitePalette.shadow
+        )
+}
 
 @Page
 @Composable
 fun NotFoundPage() {
+    val palette = ColorMode.current.toPalette()
+    val sitePalette = ColorMode.current.toSitePalette()
+    
     Box(
         Modifier
             .fillMaxSize()
-            .backgroundColor(Theme.backgroundColor)
+            .backgroundColor(palette.background)
             .display(DisplayStyle.Flex)
             .justifyContent(JustifyContent.Center)
-            .alignItems(AlignItems.Center),
+            .alignItems(AlignItems.Center)
+            .padding(20.px),
         contentAlignment = Alignment.Center,
     ) {
-        Column(
-            modifier =
-                Modifier
-                    .maxWidth(600.px)
-                    .padding(20.px),
-            horizontalAlignment = Alignment.CenterHorizontally,
+        Box(
+            NotFoundCardStyle.toModifier()
+                .maxWidth(600.px),
+            contentAlignment = Alignment.Center,
         ) {
-            // 404 Text with animation
-            SpanText(
-                "404",
-                TextStyle.toModifier(),
-            )
-
-            // Page Not Found Text
-            SpanText(
-                "Page Not Found",
-                Modifier
-                    .fontSize(36.px)
-                    .fontWeight(FontWeight.Medium)
-                    .color(Theme.textColor)
-                    .margin(bottom = 16.px),
-            )
-
-            // Description
-            SpanText(
-                "Sorry, we couldn't find the page you're looking for. Please check the URL or go back to the homepage.",
-                Modifier
-                    .fontSize(16.px)
-                    .color(Theme.secondaryTextColor)
-                    .textAlign(TextAlign.Center)
-                    .margin(bottom = 32.px),
-            )
-
-            // Home Button
-            Button(
-                onClick = { window.location.href = "https://afwg.malefic.xyz" },
-                ButtonStyle.toModifier(),
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
+                // 404 Text with enhanced animation
                 SpanText(
-                    "Back to Homepage",
-                    Modifier
-                        .fontSize(16.px)
-                        .fontWeight(FontWeight.Medium),
+                    "404",
+                    NotFoundTextStyle.toModifier(),
                 )
+
+                // Page Not Found Text
+                SpanText(
+                    "Page Not Found",
+                    Modifier
+                        .fontSize(42.px)
+                        .fontWeight(FontWeight.SemiBold)
+                        .color(palette.color)
+                        .letterSpacing((-0.02).em)
+                        .margin(bottom = 24.px)
+                        .textAlign(TextAlign.Center),
+                )
+
+                // Enhanced Description
+                SpanText(
+                    "The page you're looking for doesn't exist. It might have been moved, deleted, or you entered the wrong URL.",
+                    Modifier
+                        .fontSize(18.px)
+                        .color(palette.color.toRgb().copyf(alpha = 0.7f))
+                        .textAlign(TextAlign.Center)
+                        .margin(bottom = 40.px)
+                        .maxWidth(480.px),
+                )
+
+                // Enhanced Home Button
+                Button(
+                    onClick = { window.location.href = "https://afwg.malefic.xyz" },
+                    EnhancedButtonStyle.toModifier(),
+                ) {
+                    SpanText("Back to Homepage")
+                }
             }
         }
     }
