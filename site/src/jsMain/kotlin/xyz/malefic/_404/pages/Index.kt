@@ -49,84 +49,86 @@ import org.jetbrains.compose.web.css.px
 import org.jetbrains.compose.web.css.s
 import xyz.malefic._404.toSitePalette
 
-val NotFoundTextStyle = CssStyle {
-    base {
-        Modifier
-            .fontSize(120.px)
-            .fontWeight(FontWeight.Bold)
-            .letterSpacing((-0.05).em)
-            .color(colorMode.toPalette().color)
-            .opacity(0.9)
-            .transition(
-                Transition.of(TransitionProperty.All, 0.4.s),
-                Transition.of("transform", 0.3.s)
-            )
+val NotFoundTextStyle =
+    CssStyle {
+        base {
+            Modifier
+                .fontSize(120.px)
+                .fontWeight(FontWeight.Bold)
+                .letterSpacing((-0.05).em)
+                .color(colorMode.toPalette().color)
+                .opacity(0.9)
+                .transition(
+                    Transition.of(TransitionProperty.All, 0.4.s),
+                    Transition.of("transform", 0.3.s),
+                )
+        }
+        hover {
+            Modifier
+                .transform { scale(1.05) }
+                .opacity(1.0)
+        }
     }
-    hover {
-        Modifier
-            .transform { scale(1.05) }
-            .opacity(1.0)
-    }
-}
 
-val EnhancedButtonStyle = CssStyle {
-    base {
+val EnhancedButtonStyle =
+    CssStyle {
+        base {
+            val sitePalette = colorMode.toSitePalette()
+            Modifier
+                .backgroundColor(sitePalette.brand.primary)
+                .color(Colors.White)
+                .padding(leftRight = 32.px, topBottom = 16.px)
+                .borderRadius(12.px)
+                .cursor(Cursor.Pointer)
+                .fontSize(16.px)
+                .fontWeight(FontWeight.Medium)
+                .letterSpacing(0.025.em)
+                .boxShadow(
+                    offsetX = 0.px,
+                    offsetY = 4.px,
+                    blurRadius = 16.px,
+                    color = sitePalette.shadow,
+                ).transition(
+                    Transition.of("background-color", 0.2.s),
+                    Transition.of("transform", 0.2.s),
+                    Transition.of("box-shadow", 0.2.s),
+                )
+        }
+        hover {
+            val sitePalette = colorMode.toSitePalette()
+            Modifier
+                .backgroundColor(sitePalette.brand.primaryHover)
+                .transform { scale(1.02) }
+                .boxShadow(
+                    offsetX = 0.px,
+                    offsetY = 8.px,
+                    blurRadius = 20.px,
+                    color = sitePalette.shadow,
+                )
+        }
+    }
+
+val NotFoundCardStyle =
+    CssStyle {
         val sitePalette = colorMode.toSitePalette()
         Modifier
-            .backgroundColor(sitePalette.brand.primary)
-            .color(Colors.White)
-            .padding(leftRight = 32.px, topBottom = 16.px)
-            .borderRadius(12.px)
-            .cursor(Cursor.Pointer)
-            .fontSize(16.px)
-            .fontWeight(FontWeight.Medium)
-            .letterSpacing(0.025.em)
+            .backgroundColor(sitePalette.surface)
+            .borderRadius(24.px)
+            .padding(48.px)
             .boxShadow(
-                offsetX = 0.px, 
-                offsetY = 4.px, 
-                blurRadius = 16.px, 
-                color = sitePalette.shadow
-            )
-            .transition(
-                Transition.of("background-color", 0.2.s),
-                Transition.of("transform", 0.2.s),
-                Transition.of("box-shadow", 0.2.s)
+                offsetX = 0.px,
+                offsetY = 20.px,
+                blurRadius = 40.px,
+                color = sitePalette.shadow,
             )
     }
-    hover {
-        val sitePalette = colorMode.toSitePalette()
-        Modifier
-            .backgroundColor(sitePalette.brand.primaryHover)
-            .transform { scale(1.02) }
-            .boxShadow(
-                offsetX = 0.px, 
-                offsetY = 8.px, 
-                blurRadius = 20.px, 
-                color = sitePalette.shadow
-            )
-    }
-}
-
-val NotFoundCardStyle = CssStyle.base {
-    val sitePalette = colorMode.toSitePalette()
-    Modifier
-        .backgroundColor(sitePalette.surface)
-        .borderRadius(24.px)
-        .padding(48.px)
-        .boxShadow(
-            offsetX = 0.px,
-            offsetY = 20.px,
-            blurRadius = 40.px,
-            color = sitePalette.shadow
-        )
-}
 
 @Page
 @Composable
 fun NotFoundPage() {
     val palette = ColorMode.current.toPalette()
     val sitePalette = ColorMode.current.toSitePalette()
-    
+
     Box(
         Modifier
             .fillMaxSize()
@@ -138,7 +140,8 @@ fun NotFoundPage() {
         contentAlignment = Alignment.Center,
     ) {
         Box(
-            NotFoundCardStyle.toModifier()
+            NotFoundCardStyle
+                .toModifier()
                 .maxWidth(600.px),
             contentAlignment = Alignment.Center,
         ) {

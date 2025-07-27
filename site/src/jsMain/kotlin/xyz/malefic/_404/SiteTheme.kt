@@ -30,42 +30,45 @@ class SitePalette(
 }
 
 object SitePalettes {
-    val light = SitePalette(
-        nearBackground = Color.rgb(0xF8FAFC),
-        surface = Color.rgb(0xFFFFFF),
-        surfaceVariant = Color.rgb(0xF1F5F9),
-        outline = Color.rgb(0xE2E8F0),
-        shadow = Color.rgba(0x0F172A, 0.1f),
-        cobweb = Colors.LightGray,
-        brand = SitePalette.Brand(
-            primary = Color.rgb(0x4F46E5),
-            primaryHover = Color.rgb(0x4338CA),
-            primaryPressed = Color.rgb(0x3730A3),
-            accent = Color.rgb(0xF59E0B),
+    val light =
+        SitePalette(
+            nearBackground = Color.rgb(0xF8FAFC),
+            surface = Color.rgb(0xFFFFFF),
+            surfaceVariant = Color.rgb(0xF1F5F9),
+            outline = Color.rgb(0xE2E8F0),
+            shadow = Color.rgba(15, 23, 42, 0.1f),
+            cobweb = Colors.LightGray,
+            brand =
+                SitePalette.Brand(
+                    primary = Color.rgb(0x4F46E5),
+                    primaryHover = Color.rgb(0x4338CA),
+                    primaryPressed = Color.rgb(0x3730A3),
+                    accent = Color.rgb(0xF59E0B),
+                ),
         )
-    )
-    val dark = SitePalette(
-        nearBackground = Color.rgb(0x1E293B),
-        surface = Color.rgb(0x0F172A),
-        surfaceVariant = Color.rgb(0x334155),
-        outline = Color.rgb(0x475569),
-        shadow = Color.rgba(0x000000, 0.3f),
-        cobweb = Colors.LightGray.inverted(),
-        brand = SitePalette.Brand(
-            primary = Color.rgb(0x6366F1),
-            primaryHover = Color.rgb(0x8B5CF6),
-            primaryPressed = Color.rgb(0xA78BFA),
-            accent = Color.rgb(0xFBBF24),
+    val dark =
+        SitePalette(
+            nearBackground = Color.rgb(0x1E293B),
+            surface = Color.rgb(0x0F172A),
+            surfaceVariant = Color.rgb(0x334155),
+            outline = Color.rgb(0x475569),
+            shadow = Color.rgba(0, 0, 0, 0.3f),
+            cobweb = Colors.LightGray.inverted(),
+            brand =
+                SitePalette.Brand(
+                    primary = Color.rgb(0x6366F1),
+                    primaryHover = Color.rgb(0x8B5CF6),
+                    primaryPressed = Color.rgb(0xA78BFA),
+                    accent = Color.rgb(0xFBBF24),
+                ),
         )
-    )
 }
 
-fun ColorMode.toSitePalette(): SitePalette {
-    return when (this) {
+fun ColorMode.toSitePalette(): SitePalette =
+    when (this) {
         ColorMode.LIGHT -> SitePalettes.light
         ColorMode.DARK -> SitePalettes.dark
     }
-}
 
 @InitSilk
 fun initTheme(ctx: InitSilkContext) {

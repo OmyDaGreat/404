@@ -10,11 +10,14 @@ import xyz.malefic._404.CircleButtonVariant
 import xyz.malefic._404.UncoloredButtonVariant
 
 @Composable
-fun IconButton(onClick: () -> Unit, content: @Composable () -> Unit) {
+fun IconButton(
+    onClick: () -> Unit,
+    content: @Composable () -> Unit,
+) {
     Button(
         onClick = { onClick() },
         Modifier.setVariable(ButtonVars.FontSize, 1.em), // Make button icon size relative to parent container font size
-        variant = CircleButtonVariant.then(UncoloredButtonVariant)
+        variant = CircleButtonVariant.then(UncoloredButtonVariant),
     ) {
         content()
     }

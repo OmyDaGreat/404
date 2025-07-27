@@ -6,7 +6,11 @@ import com.varabyte.kobweb.compose.css.WhiteSpace
 import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.ui.Alignment
 import com.varabyte.kobweb.compose.ui.Modifier
-import com.varabyte.kobweb.compose.ui.modifiers.*
+import com.varabyte.kobweb.compose.ui.modifiers.backgroundColor
+import com.varabyte.kobweb.compose.ui.modifiers.padding
+import com.varabyte.kobweb.compose.ui.modifiers.setVariable
+import com.varabyte.kobweb.compose.ui.modifiers.textAlign
+import com.varabyte.kobweb.compose.ui.modifiers.whiteSpace
 import com.varabyte.kobweb.compose.ui.toAttrs
 import com.varabyte.kobweb.silk.components.navigation.Link
 import com.varabyte.kobweb.silk.components.navigation.UncoloredLinkVariant
@@ -21,11 +25,12 @@ import org.jetbrains.compose.web.css.percent
 import org.jetbrains.compose.web.dom.Span
 import xyz.malefic._404.toSitePalette
 
-val FooterStyle = CssStyle.base {
-    Modifier
-        .backgroundColor(colorMode.toSitePalette().nearBackground)
-        .padding(topBottom = 1.5.cssRem, leftRight = 10.percent)
-}
+val FooterStyle =
+    CssStyle.base {
+        Modifier
+            .backgroundColor(colorMode.toSitePalette().nearBackground)
+            .padding(topBottom = 1.5.cssRem, leftRight = 10.percent)
+    }
 
 @Composable
 fun Footer(modifier: Modifier = Modifier) {
@@ -37,7 +42,7 @@ fun Footer(modifier: Modifier = Modifier) {
                 "https://github.com/varabyte/kobweb",
                 "Kobweb",
                 Modifier.setVariable(ColorVar, sitePalette.brand.primary),
-                variant = UncoloredLinkVariant
+                variant = UncoloredLinkVariant,
             )
             SpanText(", template designed by ")
 
@@ -47,7 +52,7 @@ fun Footer(modifier: Modifier = Modifier) {
                 "https://ui-rocket.com",
                 "UI Rocket",
                 Modifier.setVariable(ColorVar, sitePalette.brand.accent).whiteSpace(WhiteSpace.NoWrap),
-                variant = UncoloredLinkVariant
+                variant = UncoloredLinkVariant,
             )
         }
     }
