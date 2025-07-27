@@ -1,7 +1,13 @@
 package xyz.malefic._404.pages
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import com.varabyte.kobweb.compose.css.Cursor
+import kotlinx.coroutines.delay
 import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.css.TextAlign
 import com.varabyte.kobweb.compose.css.Transition
@@ -121,6 +127,10 @@ val NotFoundCardStyle =
                 blurRadius = 40.px,
                 color = sitePalette.shadow,
             )
+            .transition(
+                Transition.of("transform", 0.8.s),
+                Transition.of("opacity", 0.8.s),
+            )
     }
 
 @Page
@@ -128,6 +138,15 @@ val NotFoundCardStyle =
 fun NotFoundPage() {
     val palette = ColorMode.current.toPalette()
     val sitePalette = ColorMode.current.toSitePalette()
+    
+    // Animation state for slide/fade-in effect
+    var isVisible by remember { mutableStateOf(false) }
+    
+    // Trigger animation on component mount
+    LaunchedEffect(Unit) {
+        delay(100) // Small delay to ensure smooth animation
+        isVisible = true
+    }
 
     Box(
         Modifier
@@ -142,7 +161,11 @@ fun NotFoundPage() {
         Box(
             NotFoundCardStyle
                 .toModifier()
-                .maxWidth(600.px),
+                .maxWidth(600.px)
+                .opacity(if (isVisible) 1.0 else 0.0)
+                .transform { 
+                    translateY(if (isVisible) 0.px else (-50).px)
+                },
             contentAlignment = Alignment.Center,
         ) {
             Column(
