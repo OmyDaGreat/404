@@ -1,6 +1,11 @@
 package xyz.malefic._404.pages
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import com.varabyte.kobweb.compose.css.Cursor
 import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.css.TextAlign
@@ -41,6 +46,7 @@ import com.varabyte.kobweb.silk.theme.colors.palette.background
 import com.varabyte.kobweb.silk.theme.colors.palette.color
 import com.varabyte.kobweb.silk.theme.colors.palette.toPalette
 import kotlinx.browser.window
+import kotlinx.coroutines.delay
 import org.jetbrains.compose.web.css.AlignItems
 import org.jetbrains.compose.web.css.DisplayStyle
 import org.jetbrains.compose.web.css.JustifyContent
@@ -123,11 +129,42 @@ val NotFoundCardStyle =
             )
     }
 
+val FadeInAnimation =
+    CssStyle {
+        base {
+            Modifier
+                .opacity(0)
+                .transform { translateY(30.px) }
+                .transition(
+                    Transition.of("opacity", 0.5.s),
+                    Transition.of("transform", 0.5.s),
+                )
+        }
+    }
+
+val FadeInActiveAnimation =
+    CssStyle {
+        base {
+            Modifier
+                .opacity(1)
+                .transform { translateY(0.px) }
+        }
+    }
+
 @Page
 @Composable
 fun NotFoundPage() {
     val palette = ColorMode.current.toPalette()
     val sitePalette = ColorMode.current.toSitePalette()
+
+    // Animation state control
+    var isVisible by remember { mutableStateOf(false) }
+
+    // Trigger the animation after the component is first composed
+    LaunchedEffect(Unit) {
+        delay(100)
+        isVisible = true
+    }
 
     Box(
         Modifier
@@ -142,7 +179,9 @@ fun NotFoundPage() {
         Box(
             NotFoundCardStyle
                 .toModifier()
-                .maxWidth(600.px),
+                .maxWidth(600.px)
+                .then(FadeInAnimation.toModifier())
+                .then(if (isVisible) FadeInActiveAnimation.toModifier() else Modifier),
             contentAlignment = Alignment.Center,
         ) {
             Column(
@@ -151,7 +190,18 @@ fun NotFoundPage() {
                 // 404 Text with enhanced animation
                 SpanText(
                     "404",
-                    NotFoundTextStyle.toModifier(),
+                    NotFoundTextStyle
+                        .toModifier()
+                        .then(FadeInAnimation.toModifier())
+                        .then(
+                            if (isVisible) {
+                                FadeInActiveAnimation.toModifier().transition(
+                                    Transition.of("all", 0.5.s, delay = 0.1.s),
+                                )
+                            } else {
+                                Modifier
+                            },
+                        ),
                 )
 
                 // Page Not Found Text
@@ -163,7 +213,17 @@ fun NotFoundPage() {
                         .color(palette.color)
                         .letterSpacing((-0.02).em)
                         .margin(bottom = 24.px)
-                        .textAlign(TextAlign.Center),
+                        .textAlign(TextAlign.Center)
+                        .then(FadeInAnimation.toModifier())
+                        .then(
+                            if (isVisible) {
+                                FadeInActiveAnimation.toModifier().transition(
+                                    Transition.of("all", 0.5.s, delay = 0.2.s),
+                                )
+                            } else {
+                                Modifier
+                            },
+                        ),
                 )
 
                 // Enhanced Description
@@ -174,13 +234,34 @@ fun NotFoundPage() {
                         .color(palette.color.toRgb().copyf(alpha = 0.7f))
                         .textAlign(TextAlign.Center)
                         .margin(bottom = 40.px)
-                        .maxWidth(480.px),
+                        .maxWidth(480.px)
+                        .then(FadeInAnimation.toModifier())
+                        .then(
+                            if (isVisible) {
+                                FadeInActiveAnimation.toModifier().transition(
+                                    Transition.of("all", 0.5.s, delay = 0.3.s),
+                                )
+                            } else {
+                                Modifier
+                            },
+                        ),
                 )
 
                 // Enhanced Home Button
                 Button(
                     onClick = { window.location.href = "https://afwg.malefic.xyz" },
-                    EnhancedButtonStyle.toModifier(),
+                    EnhancedButtonStyle
+                        .toModifier()
+                        .then(FadeInAnimation.toModifier())
+                        .then(
+                            if (isVisible) {
+                                FadeInActiveAnimation.toModifier().transition(
+                                    Transition.of("all", 0.5.s, delay = 0.4.s),
+                                )
+                            } else {
+                                Modifier
+                            },
+                        ),
                 ) {
                     SpanText("Back to Homepage")
                 }
