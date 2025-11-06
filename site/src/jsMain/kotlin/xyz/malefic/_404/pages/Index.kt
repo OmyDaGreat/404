@@ -11,6 +11,7 @@ import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.css.TextAlign
 import com.varabyte.kobweb.compose.css.Transition
 import com.varabyte.kobweb.compose.css.TransitionProperty
+import com.varabyte.kobweb.compose.foundation.layout.Arrangement
 import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.foundation.layout.Column
 import com.varabyte.kobweb.compose.ui.Alignment
@@ -26,6 +27,7 @@ import com.varabyte.kobweb.compose.ui.modifiers.display
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxSize
 import com.varabyte.kobweb.compose.ui.modifiers.fontSize
 import com.varabyte.kobweb.compose.ui.modifiers.fontWeight
+import com.varabyte.kobweb.compose.ui.modifiers.height
 import com.varabyte.kobweb.compose.ui.modifiers.justifyContent
 import com.varabyte.kobweb.compose.ui.modifiers.letterSpacing
 import com.varabyte.kobweb.compose.ui.modifiers.margin
@@ -53,6 +55,7 @@ import org.jetbrains.compose.web.css.JustifyContent
 import org.jetbrains.compose.web.css.em
 import org.jetbrains.compose.web.css.px
 import org.jetbrains.compose.web.css.s
+import org.jetbrains.compose.web.css.vh
 import xyz.malefic._404.toSitePalette
 
 val NotFoundTextStyle =
@@ -153,9 +156,9 @@ val FadeInActiveAnimation =
 
 @Page
 @Composable
+@Suppress("unused")
 fun NotFoundPage() {
     val palette = ColorMode.current.toPalette()
-    val sitePalette = ColorMode.current.toSitePalette()
 
     // Animation state control
     var isVisible by remember { mutableStateOf(false) }
@@ -169,6 +172,7 @@ fun NotFoundPage() {
     Box(
         Modifier
             .fillMaxSize()
+            .height(100.vh)
             .backgroundColor(palette.background)
             .display(DisplayStyle.Flex)
             .justifyContent(JustifyContent.Center)
@@ -181,10 +185,16 @@ fun NotFoundPage() {
                 .toModifier()
                 .maxWidth(600.px)
                 .then(FadeInAnimation.toModifier())
-                .then(if (isVisible) FadeInActiveAnimation.toModifier() else Modifier),
+                .then(if (isVisible) FadeInActiveAnimation.toModifier() else Modifier)
+                .justifyContent(JustifyContent.Center)
+                .alignItems(AlignItems.Center),
             contentAlignment = Alignment.Center,
         ) {
             Column(
+                Modifier
+                    .justifyContent(JustifyContent.Center)
+                    .alignItems(AlignItems.Center),
+                verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 // 404 Text with enhanced animation

@@ -3,6 +3,8 @@ package xyz.malefic._404
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import com.varabyte.kobweb.compose.css.ScrollBehavior
+import com.varabyte.kobweb.compose.ui.modifiers.alignItems
+import com.varabyte.kobweb.compose.ui.modifiers.justifyContent
 import com.varabyte.kobweb.compose.ui.modifiers.minHeight
 import com.varabyte.kobweb.compose.ui.modifiers.scrollBehavior
 import com.varabyte.kobweb.core.App
@@ -16,7 +18,8 @@ import com.varabyte.kobweb.silk.theme.colors.ColorMode
 import com.varabyte.kobweb.silk.theme.colors.loadFromLocalStorage
 import com.varabyte.kobweb.silk.theme.colors.saveToLocalStorage
 import com.varabyte.kobweb.silk.theme.colors.systemPreference
-import kotlinx.browser.localStorage
+import org.jetbrains.compose.web.css.AlignItems
+import org.jetbrains.compose.web.css.JustifyContent
 import org.jetbrains.compose.web.css.vh
 
 private const val COLOR_MODE_KEY = "_404:colorMode"
@@ -39,7 +42,9 @@ fun AppEntry(content: @Composable () -> Unit) {
             SmoothColorStyle
                 .toModifier()
                 .minHeight(100.vh)
-                .scrollBehavior(ScrollBehavior.Smooth),
+                .scrollBehavior(ScrollBehavior.Smooth)
+                .alignItems(AlignItems.Center)
+                .justifyContent(JustifyContent.Center),
         ) {
             content()
         }
